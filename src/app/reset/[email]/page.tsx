@@ -4,76 +4,65 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Separator } from "@/components/ui/separator";
-import { LoginFormSchema } from "@/lib/schemas";
-import { URLS } from "@/lib/urls";
+import { ResetPasswordFormSchema } from "@/lib/schemas";
 
-export default function LoginPage() {
-    const form = useForm<z.infer<typeof LoginFormSchema>>({
-        resolver: zodResolver(LoginFormSchema),
+export default function ResetPasswordPage() {
+    const form = useForm<z.infer<typeof ResetPasswordFormSchema>>({
+        resolver: zodResolver(ResetPasswordFormSchema),
         defaultValues: {
-            email: "",
-            password: ""
+            password: "",
+            confirmPassword: ""
         },
     });
-    function onSubmit(values: z.infer<typeof LoginFormSchema>) {
+    console.log(form.watch('password'));
+    console.log(form.watch('confirmPassword'));
+    function onSubmit(values: z.infer<typeof ResetPasswordFormSchema>) {
         console.log(values)
     };
     return (
-        <div className="flex flex-col items-center justify-center gap-4 h-screen">
-            <Link href={URLS.register}>
-                <div className="flex gap-4 items-center">
-                    <Label>Don't have an account?</Label>
-                    <Button variant={"default"}>Get started!</Button>
-                </div>
-            </Link>
-            <Separator className="my-4 w-[350px]" />
-            <Label>Login with your email and password.</Label>
+        <div className="flex flex-col items-center justify-center gap-4 h-[350px]">
+            <div className="flex flex-col gap-2 text-justify">
+                <Label>Reset your password.</Label>
+            </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="example@gamil.com" {...field} />
-                                </FormControl>
-                                <FormDescription>
-                                    Enter your registered email address.
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                     <FormField
                         control={form.control}
                         name="password"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>New password</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="xxxxxx" {...field} type="password" />
+                                    <Input placeholder="xxxxxxxx" {...field} type="password" />
                                 </FormControl>
                                 <FormDescription>
-                                    Enter your password.
+                                    Enter a strong new password.
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <Link href={URLS.sendEmail}>
-                        <div className="mt-4 text-red-600 text-sm">
-                            Don't remember the password?
-                        </div>
-                    </Link>
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Repeat the password</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="xxxxxxxx" {...field} type="password" />
+                                </FormControl>
+                                <FormDescription>
+                                    Enter the same password as the password field.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <div className="flex justify-center">
-                        <Button type="submit">Login</Button>
+                        <Button type="submit">Reset</Button>
                     </div>
                 </form>
             </Form>
