@@ -10,6 +10,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
 import { RegisterFormSchema } from "@/lib/schemas";
+import { handleRegisterAction } from "@/lib/actions";
+import { useState } from "react";
 
 export default function RegisterPage() {
     const form = useForm<z.infer<typeof RegisterFormSchema>>({
@@ -21,8 +23,10 @@ export default function RegisterPage() {
             confirmPassword: ""
         },
     });
-    function onSubmit(values: z.infer<typeof RegisterFormSchema>) {
-        console.log(values)
+    const [error, setError] = useState<string | undefined>('');
+    async function onSubmit(values: z.infer<typeof RegisterFormSchema>) {
+        const response = await handleRegisterAction(values);
+        setError(response?.error);
     };
     return (
         <div className="flex flex-col items-center justify-center gap-4 mt-4 mb-4">
@@ -34,6 +38,9 @@ export default function RegisterPage() {
             </Link>
             <Separator className="my-4 w-[350px]" />
             <Label>Create a new account with your email and password.</Label>
+            {
+                error && <span className="flex flex-col m-2 p-2 items-center justify-center text-orange-600">{error}</span>
+            }
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                     <FormField

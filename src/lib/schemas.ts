@@ -27,11 +27,11 @@ export const RegisterFormSchema = z.object({
         },
         { message: `Please enter a valid email address.` }
     ),
-    password: z.string().min(1, {
-        message: "Password is required."
+    password: z.string().min(6, {
+        message: "Password is required and must be more than 6 character long."
     }),
-    confirmPassword: z.string().min(1, {
-        message: "Confirm password is required."
+    confirmPassword: z.string().min(6, {
+        message: "Confirm is required and must be more than 6 character long."
     }),
     name: z.string().min(1, {
         message: "Name is required."
