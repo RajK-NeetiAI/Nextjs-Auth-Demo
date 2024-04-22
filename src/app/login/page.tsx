@@ -11,6 +11,8 @@ import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
 import { LoginFormSchema } from "@/lib/schemas";
 import { URLS } from "@/lib/urls";
+import { handleLoginAction } from "@/lib/actions";
+import { useState } from "react";
 
 export default function LoginPage() {
     const form = useForm<z.infer<typeof LoginFormSchema>>({
@@ -20,11 +22,13 @@ export default function LoginPage() {
             password: ""
         },
     });
-    function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-        console.log(values)
+    const [error, setError] = useState<string | undefined>('');
+    async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
+        const response = await handleLoginAction(values);
+        setError(response?.error);
     };
     return (
-        <div className="flex flex-col items-center justify-center gap-4 h-screen">
+        <div className="flex flex-col items-center justify-center gap-4 mt-4 mb-4">
             <Link href={URLS.register}>
                 <div className="flex gap-4 items-center">
                     <Label>Don't have an account?</Label>
@@ -33,6 +37,9 @@ export default function LoginPage() {
             </Link>
             <Separator className="my-4 w-[350px]" />
             <Label>Login with your email and password.</Label>
+            {
+                error && <span className="flex flex-col m-2 p-2 items-center justify-center text-orange-600">{error}</span>
+            }
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
@@ -69,7 +76,7 @@ export default function LoginPage() {
                     />
                     <Link href={URLS.sendEmail}>
                         <div className="mt-4 text-red-600 text-sm">
-                            Don't remember the password?
+                            Don't remember your password?
                         </div>
                     </Link>
                     <div className="flex justify-center">

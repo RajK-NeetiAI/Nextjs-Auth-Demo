@@ -17,14 +17,15 @@ export default function RegisterPage() {
         defaultValues: {
             email: "",
             password: "",
-            name: ""
+            name: "",
+            confirmPassword: ""
         },
     });
     function onSubmit(values: z.infer<typeof RegisterFormSchema>) {
         console.log(values)
     };
     return (
-        <div className="flex flex-col items-center justify-center gap-4 h-screen">
+        <div className="flex flex-col items-center justify-center gap-4 mt-4 mb-4">
             <Link href={"/login"}>
                 <div className="flex gap-4 items-center">
                     <Label>Already have an account?</Label>
@@ -32,9 +33,9 @@ export default function RegisterPage() {
                 </div>
             </Link>
             <Separator className="my-4 w-[350px]" />
-            <Label>Login with your email and password.</Label>
+            <Label>Create a new account with your email and password.</Label>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                     <FormField
                         control={form.control}
                         name="name"
@@ -78,6 +79,22 @@ export default function RegisterPage() {
                                 </FormControl>
                                 <FormDescription>
                                     Enter your password.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Repeat the password</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="xxxxxxxx" {...field} type="password" />
+                                </FormControl>
+                                <FormDescription>
+                                    Enter the same password as the password field.
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>

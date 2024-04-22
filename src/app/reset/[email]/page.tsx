@@ -17,8 +17,6 @@ export default function ResetPasswordPage() {
             confirmPassword: ""
         },
     });
-    console.log(form.watch('password'));
-    console.log(form.watch('confirmPassword'));
     function onSubmit(values: z.infer<typeof ResetPasswordFormSchema>) {
         console.log(values)
     };

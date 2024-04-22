@@ -3,5 +3,6 @@ export const URLS = {
     register: '/register',
     home: '/',
     reset: '/reset',
-    sendEmail: '/send-email'
+    sendEmail: '/send-email',
+    dashboard: '/dashboard'
 };

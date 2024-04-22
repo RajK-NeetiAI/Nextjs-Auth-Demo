@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="flex items-center justify-end m-4 gap-4">
+    <div className="flex items-center justify-end mt-4 mr-4 gap-4">
       <Link href={URLS.login} className="gap-4">
         <Button>Login</Button>
       </Link>

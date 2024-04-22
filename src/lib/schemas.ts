@@ -30,10 +30,17 @@ export const RegisterFormSchema = z.object({
     password: z.string().min(1, {
         message: "Password is required."
     }),
+    confirmPassword: z.string().min(1, {
+        message: "Confirm password is required."
+    }),
     name: z.string().min(1, {
         message: "Name is required."
     })
-});
+})
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match. Please check them.",
+        path: ["confirmPassword"]
+    });
 
 export const SendForgotPasswordFormSchema = z.object({
     email: z.string().email().refine(
@@ -55,4 +62,8 @@ export const ResetPasswordFormSchema = z.object({
     confirmPassword: z.string().min(1, {
         message: "Confirm password is required."
     })
-});
+})
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match. Please check them.",
+        path: ["confirmPassword"]
+    });
