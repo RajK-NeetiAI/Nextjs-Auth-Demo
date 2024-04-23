@@ -6,6 +6,7 @@ import { LoginFormSchema } from "@/lib/schemas";
 import { URLS } from "@/lib/urls";
 import bcrypt from "bcryptjs";
 
+
 export const { auth, signIn, signOut, handlers: { GET, POST } } = NextAuth({
     providers: [
         Credentials({
@@ -35,14 +36,21 @@ export const { auth, signIn, signOut, handlers: { GET, POST } } = NextAuth({
         signIn: URLS.login,
         signOut: URLS.home
     },
-    session: { strategy: "jwt" },
+    session: { strategy: "jwt", maxAge: 3600 },
     callbacks: {
+        async jwt({ token, user }) {
+            return {
+                ...token,
+                ...user
+            };
+        },
         session(params) {
             return {
                 ...params.session,
                 user: {
                     ...params.session.user,
-                    id: params.token.sub
+                    id: params.token.sub,
+                    isVerified: params.token.isVerified
                 }
             }
         }

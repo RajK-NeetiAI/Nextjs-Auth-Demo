@@ -25,3 +25,15 @@ export const createNewUser = async (data: z.infer<typeof RegisterFormSchema>) =>
     });
     return newUser;
 };
+
+export const updateUserByEmail = async (email: string) => {
+    const user = await prisma.user.update({
+        where: {
+            email: email
+        },
+        data: {
+            isVerified: true
+        }
+    });
+    return user;
+};

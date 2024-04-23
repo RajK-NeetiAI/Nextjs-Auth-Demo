@@ -4,5 +4,7 @@ export const URLS = {
     home: '/',
     reset: '/reset',
     sendEmail: '/send-email',
-    dashboard: '/dashboard'
+    dashboard: '/dashboard',
+    newUser: '/new-user',
+    verify: '/verify'
 };

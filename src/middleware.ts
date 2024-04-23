@@ -11,14 +11,19 @@ const publicRoutes = [
     URLS.login,
     URLS.register,
     URLS.sendEmail,
-    URLS.reset
+    URLS.reset,
+    URLS.verify
 ];
 
 export async function middleware(request: NextRequest) {
     const { nextUrl } = request;
     const session = await auth();
     if (!session && protectedRoutes.includes(nextUrl.pathname)) {
-        return Response.redirect(new URL(URLS.login, nextUrl))
+        return Response.redirect(new URL(URLS.login, nextUrl));
+    }
+    //@ts-ignore
+    if (session && !session?.user.isVerified) {
+        return Response.redirect(new URL(URLS.newUser, nextUrl));
     }
     if (session && publicRoutes.includes(nextUrl.pathname)) {
         return Response.redirect(new URL(URLS.dashboard, nextUrl));
