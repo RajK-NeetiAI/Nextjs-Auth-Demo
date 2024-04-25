@@ -26,7 +26,7 @@ export default async function VerifyUserPage({ params }: { params: { email: stri
         );
     }
     const hours = Math.abs(now - issuedAt!) / 36e5;
-    const action = handleSendEmailAction.bind(null, user.email!);
+    const action = handleSendEmailAction.bind(null, user.email!, false);
     if (hours > 24) {
         return (
             <div className="mt-4 flex flex-col items-center justify-center gap-4">
@@ -43,8 +43,8 @@ export default async function VerifyUserPage({ params }: { params: { email: stri
         <div className="mt-4 flex flex-col items-center justify-center gap-4">
             <h1>You are now verified.</h1>
             <h3>{user.name}, please click on the button below to go to the Dashboard.</h3>
-            <Link href={URLS.dashboard}>
-                <Button type="submit" size={"sm"}>Dashboard</Button>
+            <Link href={URLS.login}>
+                <Button type="submit" size={"sm"}>Login</Button>
             </Link>
         </div>
     );

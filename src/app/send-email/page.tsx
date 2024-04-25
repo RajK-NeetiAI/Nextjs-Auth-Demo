@@ -10,6 +10,8 @@ import { z } from "zod";
 import { SendForgotPasswordFormSchema } from "@/lib/schemas";
 import Link from "next/link";
 import { URLS } from "@/lib/urls";
+import { useState } from "react";
+import { handleSendEmailAction } from "@/lib/actions";
 
 export default function SendForgotPasswordEmailPage() {
     const form = useForm<z.infer<typeof SendForgotPasswordFormSchema>>({
@@ -18,8 +20,12 @@ export default function SendForgotPasswordEmailPage() {
             email: ""
         },
     });
-    function onSubmit(values: z.infer<typeof SendForgotPasswordFormSchema>) {
-        console.log(values)
+    const [error, setError] = useState<string | undefined>('');
+    const [emailSent, setEmailSent] = useState<boolean>(false);
+    async function onSubmit(values: z.infer<typeof SendForgotPasswordFormSchema>) {
+        const response = await handleSendEmailAction(values.email, true);
+        setError(response?.message);
+        setEmailSent(response.status);
     };
     return (
         <>
@@ -31,6 +37,9 @@ export default function SendForgotPasswordEmailPage() {
                     <Button variant={"default"}>Get started!</Button>
                 </Link>
             </div>
+            {
+                error && <span className="flex items-center justify-center text-orange-600">{error}</span>
+            }
             <div className="flex flex-col items-center justify-center gap-4 h-[350px]">
                 <div className="flex flex-col gap-2 text-justify">
                     <Label>Enter your registered email address</Label>
@@ -45,7 +54,7 @@ export default function SendForgotPasswordEmailPage() {
                                 <FormItem>
                                     <FormLabel>Your registered email</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="example@gamil.com" {...field} />
+                                        <Input placeholder="example@gamil.com" {...field} disabled={emailSent} />
                                     </FormControl>
                                     <FormDescription>
                                         Enter your registered email address.
@@ -55,7 +64,7 @@ export default function SendForgotPasswordEmailPage() {
                             )}
                         />
                         <div className="flex justify-center">
-                            <Button type="submit">Send email</Button>
+                            <Button disabled={emailSent} type="submit">Send email</Button>
                         </div>
                     </form>
                 </Form>

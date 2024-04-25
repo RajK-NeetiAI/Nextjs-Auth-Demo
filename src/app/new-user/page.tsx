@@ -6,6 +6,22 @@ import Link from "next/link";
 
 export default async function NewUserPage() {
     const session = await auth();
+    if (!session) {
+        return (
+            <div className="mt-4 flex flex-col items-center justify-center gap-4">
+                <h1>You are not authorized to view this page.</h1>
+                <h3>If you have registered with us, please click on the button below to receive the verification email again.</h3>
+                <div className="flex gap-4">
+                    <Link href={URLS.sendEmail}>
+                        <Button type="submit" size={"sm"}>Verify Email</Button>
+                    </Link>
+                    <Link href={URLS.login}>
+                        <Button type="submit" size={"sm"}>Login</Button>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
     //@ts-ignore
     if (session?.user?.isVerified) {
         return (
@@ -18,8 +34,8 @@ export default async function NewUserPage() {
             </div>
         );
     }
-    const action = handleSendEmailAction.bind(null, session?.user?.email!);
-    const response = await handleSendEmailAction(session?.user?.email!);
+    const action = handleSendEmailAction.bind(null, session?.user?.email!, false);
+    const response = await handleSendEmailAction(session?.user?.email!, false);
     return (
         <div className="flex flex-col items-center mt-4">
             <h1>{response.message}</h1>

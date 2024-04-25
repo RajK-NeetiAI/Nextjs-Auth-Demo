@@ -12,7 +12,8 @@ const publicRoutes = [
     URLS.register,
     URLS.sendEmail,
     URLS.reset,
-    URLS.verify
+    URLS.verify,
+    URLS.newUser
 ];
 
 export async function middleware(request: NextRequest) {
@@ -21,9 +22,8 @@ export async function middleware(request: NextRequest) {
     if (!session && protectedRoutes.includes(nextUrl.pathname)) {
         return Response.redirect(new URL(URLS.login, nextUrl));
     }
-    //@ts-ignore
-    if (session && !session?.user.isVerified) {
-        return Response.redirect(new URL(URLS.newUser, nextUrl));
+    if (!session && publicRoutes.includes(nextUrl.pathname)) {
+        return null;
     }
     if (session && publicRoutes.includes(nextUrl.pathname)) {
         return Response.redirect(new URL(URLS.dashboard, nextUrl));

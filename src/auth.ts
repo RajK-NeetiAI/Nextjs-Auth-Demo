@@ -44,6 +44,14 @@ export const { auth, signIn, signOut, handlers: { GET, POST } } = NextAuth({
                 ...user
             };
         },
+        signIn: async ({ user }) => {
+            //@ts-ignore
+            if (user.isVerified) {
+                return true;
+            } else {
+                return URLS.newUser;
+            }
+        },
         session(params) {
             return {
                 ...params.session,
