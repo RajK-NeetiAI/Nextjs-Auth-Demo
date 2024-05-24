@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { getUserByEmail } from "@/lib/data";
 import { z } from "zod";
@@ -6,6 +6,16 @@ import { LoginFormSchema } from "@/lib/schemas";
 import { URLS } from "@/lib/urls";
 import bcrypt from "bcryptjs";
 
+export type User = {
+    id: string;
+    isVerified: boolean;
+} & DefaultSession["user"];
+
+declare module "next-auth" {
+    interface Session extends DefaultSession {
+        user: User;
+    }
+};
 
 export const { auth, signIn, signOut, handlers: { GET, POST } } = NextAuth({
     providers: [
